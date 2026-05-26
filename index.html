@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦉 부엉이 돌봄 가이드북</title>
+<style>
+  :root {
+    --orange: #E8843A;
+    --orange-light: #FFF3EC;
+    --orange-mid: #f5a96a;
+    --green: #4CAF50;
+    --green-light: #E8F5E9;
+    --red: #e53935;
+    --red-light: #FFEBEE;
+    --blue-light: #E8F4FD;
+    --yellow-light: #FFFDE7;
+    --gray: #666;
+    --dark: #333;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: #f5f5f5;
+    color: var(--dark);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--orange) 0%, #f5a96a 100%);
+    color: white;
+    text-align: center;
+    padding: 48px 20px 36px;
+  }
+  .hero .emoji { font-size: 72px; display: block; margin-bottom: 12px; }
+  .hero h1 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+  .hero p { font-size: 15px; opacity: 0.9; }
+
+  /* Sticky nav */
+  nav {
+    background: white;
+    border-bottom: 2px solid var(--orange-light);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  nav a {
+    display: inline-block;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: var(--gray);
+    font-size: 13px;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--orange); }
+
+  /* Sections */
+  .container { max-width: 640px; margin: 0 auto; padding: 0 16px 80px; }
+  .section { margin-top: 28px; }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--orange);
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--orange);
+    margin-bottom: 16px;
+  }
+
+  /* Card */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .card-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--dark);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Checklist */
+  .checklist { list-style: none; }
+  .checklist li {
+    padding: 6px 0 6px 24px;
+    position: relative;
+    font-size: 15px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before {
+    content: "•";
+    color: var(--orange);
+    font-weight: 900;
+    position: absolute;
+    left: 6px;
+  }
+
+  /* Warning / info boxes */
+  .box {
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    font-size: 15px;
+  }
+  .box-warn {
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+  }
+  .box-warn .box-title { color: var(--red); font-weight: 700; margin-bottom: 8px; font-size: 15px; }
+  .box-ok {
+    background: var(--green-light);
+    border-left: 4px solid var(--green);
+  }
+  .box-ok .box-title { color: var(--green); font-weight: 700; margin-bottom: 8px; font-size: 15px; }
+  .box-info {
+    background: var(--blue-light);
+    border-left: 4px solid #2196F3;
+  }
+  .box-info .box-title { color: #1565C0; font-weight: 700; margin-bottom: 8px; font-size: 15px; }
+  .box-tip {
+    background: var(--yellow-light);
+    border-left: 4px solid #FBC02D;
+  }
+  .box-tip .box-title { color: #F57F17; font-weight: 700; margin-bottom: 8px; font-size: 15px; }
+  .box ul { list-style: none; padding: 0; }
+  .box ul li { padding: 3px 0 3px 18px; position: relative; }
+  .box ul li::before { content: "•"; position: absolute; left: 4px; }
+
+  /* Checktable */
+  .check-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .check-table th {
+    background: var(--orange);
+    color: white;
+    padding: 10px 8px;
+    text-align: left;
+    font-weight: 700;
+  }
+  .check-table th:last-child { text-align: center; width: 48px; }
+  .check-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+  }
+  .check-table tr:nth-child(even) td { background: #fafafa; }
+  .check-table .freq { color: var(--gray); font-size: 13px; }
+  .check-table .memo { color: #888; font-size: 12px; }
+  .check { font-size: 20px; text-align: center; }
+
+  /* Supply table */
+  .supply-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .supply-table th {
+    background: #4CAF50;
+    color: white;
+    padding: 10px 8px;
+    text-align: left;
+    font-weight: 700;
+  }
+  .supply-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+  }
+  .supply-table tr:nth-child(even) td { background: #fafafa; }
+  .supply-table .item { font-weight: 600; }
+  .supply-table .note { color: #888; font-size: 12px; }
+
+  /* Contact */
+  .contact-card {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    margin-bottom: 14px;
+  }
+  .contact-card .contact-header {
+    background: var(--orange);
+    color: white;
+    padding: 10px 16px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .contact-card .contact-body {
+    padding: 14px 16px;
+    font-size: 15px;
+    color: var(--gray);
+  }
+
+  /* Steps */
+  .steps { list-style: none; counter-reset: step; }
+  .steps li {
+    counter-increment: step;
+    padding: 8px 0 8px 44px;
+    position: relative;
+    font-size: 15px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .steps li:last-child { border-bottom: none; }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 8px;
+    background: var(--orange);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 32px 20px;
+    color: var(--gray);
+    font-size: 14px;
+    background: white;
+    margin-top: 40px;
+  }
+  footer .heart { font-size: 24px; display: block; margin-bottom: 8px; }
+
+  /* Responsive table scroll */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="emoji">🦉</span>
+  <h1>부엉이 돌봄 가이드북</h1>
+  <p>엄마, 제가 없는 동안 잘 부탁드려요 💛</p>
+</div>
+
+<nav>
+  <a href="#checklist">📋 체크리스트</a>
+  <a href="#supply">🛒 구비물품</a>
+  <a href="#food">🍽️ 밥과 물</a>
+  <a href="#toilet">🚽 화장실</a>
+  <a href="#behavior">🐾 행동안내</a>
+  <a href="#grooming">✂️ 관리</a>
+  <a href="#caution">⚠️ 주의사항</a>
+  <a href="#health">🏥 건강신호</a>
+  <a href="#contact">📞 연락처</a>
+</nav>
+
+<div class="container">
+
+  <!-- 체크리스트 -->
+  <div class="section" id="checklist">
+    <div class="section-title">📋 일일 / 정기 체크리스트</div>
+    <div class="table-wrap">
+      <table class="check-table">
+        <thead>
+          <tr><th>할 일</th><th>빈도</th><th>메모</th><th>✓</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>물그릇 씻고 수돗물 채우기</td><td class="freq">매일</td><td class="memo">약 100g 마심</td><td class="check">☐</td></tr>
+          <tr><td>자동급식기 확인</td><td class="freq">매일</td><td class="memo">이상없으면 OK</td><td class="check">☐</td></tr>
+          <tr><td>화장실 청소 (대소변 제거)</td><td class="freq">매일</td><td class="memo">하루 1회</td><td class="check">☐</td></tr>
+          <tr><td>눈꼽 닦아주기</td><td class="freq">매일</td><td class="memo">물티슈 사용</td><td class="check">☐</td></tr>
+          <tr><td>상태 체크 (밥·물·화장실)</td><td class="freq">매일</td><td class="memo">이상하면 연락</td><td class="check">☐</td></tr>
+          <tr><td>귀 닦아주기</td><td class="freq">1~2주 1회</td><td class="memo">갈색 분비물 있을 때</td><td class="check">☐</td></tr>
+          <tr><td>빗질</td><td class="freq">1~2주 1회</td><td class="memo">털 빠짐 줄임</td><td class="check">☐</td></tr>
+          <tr><td>화장실 모래 전체 교체</td><td class="freq">2달 1회</td><td class="memo">화장실 섹션 참고</td><td class="check">☐</td></tr>
+          <tr><td>동물병원 정기검진</td><td class="freq">1년 1회</td><td class="memo">8월 초 접종예정</td><td class="check">☐</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="box box-tip" style="margin-top:12px">
+      <div>💡 평소 매일 체크하지 않아도 되지만, 뭔가 이상하다 싶을 때 기준으로 활용하세요!</div>
+    </div>
+  </div>
+
+  <!-- 구비물품 -->
+  <div class="section" id="supply">
+    <div class="section-title">🛒 구비해두실 물품</div>
+    <div class="table-wrap">
+      <table class="supply-table">
+        <thead>
+          <tr><th>물품</th><th>설명</th><th>비고</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="item">사료</td><td>하루 50g 소비, 4kg = 약 80일치</td><td class="note">미리 넉넉히 준비</td></tr>
+          <tr><td class="item">화장실 모래</td><td>2달마다 전체 교체</td><td class="note">정기배송 예정</td></tr>
+          <tr><td class="item">모래 배출 비닐</td><td>다 차면 현관 앞에 두면 수거</td><td class="note">정기배송 예정</td></tr>
+          <tr><td class="item">리터락커 비닐</td><td>비닐 다 차면 교체</td><td class="note">미리 준비</td></tr>
+          <tr><td class="item">츄르 (간식)</td><td>필요시만 (달래기용)</td><td class="note">넉넉히 비치</td></tr>
+          <tr><td class="item">물티슈</td><td>매일 눈꼽 닦기 용도</td><td class="note">무향 제품 권장</td></tr>
+          <tr><td class="item">고양이 장난감</td><td>낚싯대 형태 권장</td><td class="note">주 2~3회 놀아주기</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="box box-info" style="margin-top:12px">
+      <div class="box-title">📦 정기배송 안내</div>
+      <div>사료와 모래는 정기배송으로 맞춰놓을 예정이에요. 혹시 일찍 떨어지면 쿠팡에서 구매해 주세요.</div>
+    </div>
+  </div>
+
+  <!-- 밥과 물 -->
+  <div class="section" id="food">
+    <div class="section-title">🍽️ 밥과 물</div>
+
+    <div class="card">
+      <div class="card-title">🤖 자동 급식기</div>
+      <ul class="checklist">
+        <li>앱으로 하루 8번, 2~3시간 간격으로 자동 급식 설정되어 있어요.</li>
+        <li>하루 총 약 50g 먹어요 (4kg 사료 = 약 80일치).</li>
+        <li>통에 사료가 거의 다 되면 기기 가운데 불이 들어와요. 사료 채워주면 됩니다.</li>
+        <li>엄마는 앱 안 보셔도 되고, 전기가 나가거나 이상 있으면 제가 알림 받아서 연락드릴게요.</li>
+        <li>혹시 급식기 이상 시 → 일반 그릇에 하루 50g, 아침·저녁으로 나눠 주시면 됩니다.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🥣 사료 관련</div>
+      <ul class="checklist">
+        <li>기존에 먹던 사료 그대로 계속 주면 됩니다. 갑자기 바꾸면 배탈 날 수 있어요.</li>
+        <li>남긴 밥은 그냥 두셔도 돼요. 알아서 나중에 먹어요.</li>
+        <li>혹시 급식기 쳐다보고 있어서 더 주고 싶으면 손으로 조금 꺼내 주셔도 돼요.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💧 물</div>
+      <ul class="checklist">
+        <li>매일 그릇 씻고 수돗물로 채워주세요. 하루 총 100g 정도 마셔요.</li>
+        <li>물도 얼마나 먹는지 앱에 다 나와요! 제가 지켜보고 있으니 걱정 마세요 😊</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🍡 츄르 (간식)</div>
+      <ul class="checklist">
+        <li>딱히 안 줘도 되는데, 겁나거나 싫어하는 상황(병원 가기 전, 약 먹이기 등)에서 달래는 용도로 줘요.</li>
+        <li>한 번에 한 개만 주세요. 너무 많이 주면 밥을 안 먹어요.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 화장실 -->
+  <div class="section" id="toilet">
+    <div class="section-title">🚽 화장실 돌봄</div>
+
+    <div class="card">
+      <div class="card-title">🧹 매일 청소</div>
+      <ul class="checklist">
+        <li>부엉이가 혼자 모래에 싸고 덮어요. 엄마는 대소변만 치워주시면 됩니다.</li>
+        <li>전용 스쿱으로 덩어리진 모래와 대변을 건져서 화장실 쓰레기통에 버리세요.</li>
+        <li>보통 하루에: 대변 1번, 소변 2번 정도 해요.</li>
+      </ul>
+    </div>
+
+    <div class="box box-warn">
+      <div class="box-title">⚠️ 아래 증상이 보이면 바로 연락 주세요!</div>
+      <ul>
+        <li>소변 양이 갑자기 아주 작아졌거나, 이틀 이상 소변을 못 봄</li>
+        <li>대변 색이 검거나, 너무 묽거나 (설사), 피가 섞인 경우</li>
+        <li>3일 이상 대변을 못 봄 (변비)</li>
+        <li>화장실을 들락날락하면서 아무것도 안 나오는 경우 (방광염 의심)</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔄 2개월마다 - 모래 전체 교체</div>
+      <ol class="steps">
+        <li>모래 전부 꺼내서 비닐봉지에 담아 현관 앞에 두세요 (며칠 내 수거됩니다).</li>
+        <li>화장실 용기를 비누/세제/물로 씻은 후 휴지로 닦거나 말려주세요.</li>
+        <li>새 모래 두 봉지 다 넣으면 됩니다 (모래는 정기배송 예정).</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 행동 안내 -->
+  <div class="section" id="behavior">
+    <div class="section-title">🐾 부엉이 행동 안내</div>
+
+    <div class="card">
+      <div class="card-title">🌙 평소 일과</div>
+      <ul class="checklist">
+        <li>대부분 잠을 자요. 정말 많이 자는 게 정상이에요 (하루 14~16시간).</li>
+        <li>밥 먹을 때와 밤에 가끔 1~2분 <strong>'우다다(쾌속 달리기)'</strong> 하는 거 정상이에요.</li>
+        <li>집 안을 순찰하면서 이곳저곳 냄새 맡고 얼굴 부비는 거 영역 표시하는 거예요.</li>
+        <li>화장실 들어가시면 밖에서 우는 경우 있어요. 엄마가 어디 있는지 걱정해서 그러는 거니까 무시하셔도 되고, 열어주면 들어와서 살피고 가요 ㅋㅋ</li>
+        <li>밥 먹고 나서 '나 먹었어요' 하고 우는 것도 부엉이 특기예요. 똥 싸고 나서도 울기도 해요 😄 약간 자랑인 듯</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💕 애교 부리는 표현들</div>
+      <ul class="checklist">
+        <li><strong>골골 소리 내기:</strong> 기분 좋을 때 나는 소리예요. 많이 만져주세요.</li>
+        <li><strong>얼굴 부비기:</strong> 엄마한테 내 냄새 묻히는 거예요. 사랑 표현!</li>
+        <li><strong>작게 '야옹':</strong> 뭔가 원하거나 인사하는 거예요.</li>
+        <li><strong>꾹꾹이 (앞발로 꾹꾹 누르기):</strong> 기분 최고일 때 하는 행동이에요. 소파나 이불에 많이 해요.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">😄 이러면 놀라지 마세요</div>
+      <ul class="checklist">
+        <li><strong>화들짝 놀래 뛰어가기:</strong> 겁난 게 아니라 혼자 장난치는 거예요. 사냥놀이 느낌!</li>
+        <li><strong>재채기 자주 함:</strong> 코가 납작해서 원래 자주 해요. 큰 문제 아니에요.</li>
+        <li><strong>쿨럭쿨럭 기침:</strong> 사레들린 것처럼 하다 뛰어가요. 그냥 두시면 돼요.</li>
+        <li><strong>이름 불러도 안 옴:</strong> 정상이에요 ㅋㅋ 손으로 꼬셔야 가끔 와요.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">❤️ 좋아하는 것</div>
+      <ul class="checklist">
+        <li>머리, 얼굴 옆, 뺨 만져주고 긁어주기</li>
+        <li>손으로 머리 살짝 눌러주기 (어딘가에 머리대고 자는 걸 좋아해요)</li>
+        <li>낚싯대 장난감으로 사냥 놀이 (하루 5~10분만 해줘도 좋아해요)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 그루밍 -->
+  <div class="section" id="grooming">
+    <div class="section-title">✂️ 씻겨주기 / 관리</div>
+
+    <div class="card">
+      <div class="card-title">👁️ 눈꼽 닦기 (매일)</div>
+      <ul class="checklist">
+        <li>물티슈로 눈 안쪽에서 바깥쪽으로 살살 닦아주세요.</li>
+        <li>억지로 잡으면 싫어하니 골골대며 만져줄 때 자연스럽게 닦아주세요.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">👂 귀 닦기 (1~2주 1회)</div>
+      <ul class="checklist">
+        <li>물티슈로 가끔씩 겉에만 닦아주면 돼요.</li>
+        <li>귀는 원래 자주 긁으니 그냥 두어도 됩니다.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🪮 빗질 (1~2주 1회)</div>
+      <ul class="checklist">
+        <li>브러시로 부드럽게 빗어주면 털 뭉침 방지되고 부엉이도 좋아해요.</li>
+        <li>처음엔 털 밀어놓고 갈 거라 안 해도 되고, 털이 좀 길어지면 그때 하면 돼요.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💅 발톱 깎기 (월 1회)</div>
+      <ul class="checklist">
+        <li>한 달에 한 번 정도 깎아줘요.</li>
+        <li>어려우시면 동물병원에서 해주니까 정기검진 때 같이 부탁하세요.</li>
+        <li>발톱 끝 투명한 부분만 조금씩 잘라야 해요. <strong style="color:var(--red)">분홍색 부분은 혈관이라 자르면 안 돼요!</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 주의사항 -->
+  <div class="section" id="caution">
+    <div class="section-title">⚠️ 주의사항</div>
+
+    <div class="box box-warn">
+      <div class="box-title">⛔ 중문·현관문 나갈 때 꼭 확인!</div>
+      <div>부엉이가 밖으로 나가지 않게 주의해주세요. 열려있다고 튀어나가진 않지만 오래 열려있으면 나갈 수도 있어요.</div>
+    </div>
+
+    <div class="box box-warn">
+      <div class="box-title">⛔ 부엉이가 사라졌다면?</div>
+      <ul>
+        <li>일단 집 어딘가에 숨어있을 가능성이 가장 높아요.</li>
+        <li>들어갈 만한 온갖 구석을 찾아봐요.</li>
+        <li>정말 전부 찾아봤는데 없다면 → <strong>은영/연희/연주한테 바로 연락!</strong></li>
+        <li>요즘 고양이 탐정이란 직업도 있어서 바로 부르면 와서 찾아줘요. 너무 당황하지 마세요!</li>
+      </ul>
+    </div>
+
+    <div class="box box-warn">
+      <div class="box-title">⛔ 절대 주면 안 되는 음식</div>
+      <div>파, 마늘, 양파, 포도, 건포도, 초콜릿, 자일리톨, 생선 뼈, 우유</div>
+      <div style="margin-top:6px; font-weight:600;">실수로 먹었다면 즉시 병원으로!</div>
+    </div>
+
+    <div class="box box-warn">
+      <div class="box-title">⛔ 실이나 끈 방치 금지</div>
+      <div>노끈, 비닐백 손잡이, 머리끈 등 삼켰다가 장에서 막힐 수 있어요.</div>
+    </div>
+
+    <div class="box box-ok">
+      <div class="box-title">✅ 방충망 있다면 창문은 열어도 괜찮아요</div>
+      <div>밖을 구경하거나 냄새 맡는 걸 좋아해요. 방충망은 건드리지 않아요.</div>
+    </div>
+
+    <div class="box box-ok">
+      <div class="box-title">✅ 집 안 여기저기 문 열어두기</div>
+      <ul>
+        <li>순찰하는 고양이라 모든 공간을 확인하고 싶어해요.</li>
+        <li>자주 닫힌 문 앞에서 야옹거리면 열어주시면 돼요.</li>
+        <li>들어가지 않았으면 하는 공간이 있다면 일관성 있게 안 열어주면 됩니다!</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 건강 신호 -->
+  <div class="section" id="health">
+    <div class="section-title">🏥 이럴 때는 연락 주세요!</div>
+
+    <div class="box box-warn">
+      <div class="box-title">📞 즉시 연락 (심각한 증상)</div>
+      <ul>
+        <li>24시간 이상 밥을 전혀 안 먹을 때</li>
+        <li>소변을 하루 이상 못 볼 때</li>
+        <li>구토를 3번 이상 반복할 때 또는 피가 섞인 토</li>
+        <li>숨을 이상하게 쉬거나 입을 벌리고 헐떡일 때</li>
+        <li>눈/코에서 분비물이 심하게 날 때</li>
+      </ul>
+    </div>
+
+    <div class="box box-tip">
+      <div class="box-title">📞 일반 연락 (며칠 두고 봐도 되지만 알려주세요)</div>
+      <ul>
+        <li>2~3일째 밥을 많이 남길 때</li>
+        <li>대변이 3일 이상 없을 때</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 연락처 -->
+  <div class="section" id="contact">
+    <div class="section-title">📞 연락처</div>
+
+    <div class="contact-card">
+      <div class="contact-header">딸 (해외)</div>
+      <div class="contact-body">연락처: ____________________________</div>
+    </div>
+    <div class="contact-card">
+      <div class="contact-header">동물병원</div>
+      <div class="contact-body">
+        병원명: ____________________________<br>
+        전화: ____________________________<br>
+        운영: 평일 _____ / 주말 _____ / 공휴일 _____
+      </div>
+    </div>
+    <div class="contact-card">
+      <div class="contact-header" style="background:#e53935;">24시간 응급 동물병원</div>
+      <div class="contact-body">
+        병원명: ____________________________<br>
+        전화: ____________________________
+      </div>
+    </div>
+    <div class="contact-card">
+      <div class="contact-header" style="background:#4CAF50;">믿을 수 있는 지인</div>
+      <div class="contact-body">연락처: ____________________________</div>
+    </div>
+
+    <div class="box box-tip" style="margin-top:8px">
+      <div>🐱 은영 / 연희 / 연주 — 부엉이가 사라졌을 때 제일 먼저 연락!</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="heart">❤️</span>
+  엄마 감사해요! 부엉이 잘 부탁드립니다!<br>
+  <span style="font-size:12px; opacity:0.6; margin-top:4px; display:block">부엉이 돌봄 가이드북 · 2026–2028</span>
+</footer>
+
+</body>
+</html>
